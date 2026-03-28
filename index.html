@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XazGames — Город Хазбиково</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+--glass:rgba(20,10,40,0.55);
+--glass2:rgba(30,15,60,0.65);
+--glass-border:rgba(160,130,255,0.18);
+--glass-border2:rgba(160,130,255,0.3);
+--purple:#7c3aed;
+--purple-l:#a78bfa;
+--purple-d:#5b21b6;
+--pink:#ec4899;
+--green:#22c55e;
+--red:#ef4444;
+--blue:#3b82f6;
+--orange:#f97316;
+--yellow:#eab308;
+--cyan:#06b6d4;
+--text:#e2e8f0;
+--text2:#94a3b8;
+--text3:#64748b;
+--radius:18px;
+}
+
+html{scroll-behavior:smooth;}
+
+body{
+font-family:'Press Start 2P',monospace;
+background:linear-gradient(135deg,#0f0520 0%,#1a0a3e 30%,#0d0422 60%,#1e0f4a 100%);
+min-height:100vh;color:var(--text);font-size:10px;line-height:1.9;overflow-x:hidden;
+}
+
+body::before{
+content:'';position:fixed;inset:0;
+background:radial-gradient(ellipse at 25% 30%,rgba(124,58,237,0.08) 0%,transparent 50%),
+radial-gradient(ellipse at 75% 70%,rgba(167,139,250,0.06) 0%,transparent 50%);
+pointer-events:none;z-index:0;
+}
+
+/* ====== PARTICLES ====== */
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.particle{
+position:absolute;border-radius:50%;
+background:rgba(167,139,250,0.4);
+animation:floatP linear infinite;
+}
+@keyframes floatP{
+0%{transform:translateY(100vh) scale(0);opacity:0;}
+10%{opacity:0.8;}90%{opacity:0.8;}
+100%{transform:translateY(-10vh) scale(1);opacity:0;}
+}
+
+/* ====== GLASS MIXIN ====== */
+.glass{
+background:var(--glass);
+backdrop-filter:blur(24px) saturate(160%);
+-webkit-backdrop-filter:blur(24px) saturate(160%);
+border:1px solid var(--glass-border);
+border-radius:var(--radius);
+}
+
+.glass2{
+background:var(--glass2);
+backdrop-filter:blur(30px) saturate(180%);
+-webkit-backdrop-filter:blur(30px) saturate(180%);
+border:1px solid var(--glass-border2);
+border-radius:var(--radius);
+}
+
+.glass-purple{
+background:linear-gradient(135deg,rgba(124,58,237,0.25),rgba(91,33,182,0.18));
+backdrop-filter:blur(24px) saturate(160%);
+-webkit-backdrop-filter:blur(24px) saturate(160%);
+border:1px solid rgba(124,58,237,0.35);
+border-radius:var(--radius);
+}
+
+/* ====== HEADER ====== */
+header{
+position:fixed;top:0;left:0;right:0;z-index:1000;
+height:60px;display:flex;align-items:center;justify-content:space-between;
+padding:0 24px;
+background:rgba(10,5,25,0.6);
+backdrop-filter:blur(28px) saturate(180%);
+-webkit-backdrop-filter:blur(28px) saturate(180%);
+border-bottom:1px solid var(--glass-border);
+transition:all .3s;
+}
+
+.logo{
+font-size:13px;cursor:pointer;
+background:linear-gradient(135deg,var(--purple-l),var(--purple),var(--pink));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+transition:transform .3s;
+}
+.logo:hover{transform:scale(1.05);}
+
+nav{display:flex;gap:6px;align-items:center;}
+
+.nav-btn{
+font-family:'Press Start 2P',monospace;font-size:7px;
+color:var(--purple-l);text-decoration:none;
+padding:8px 14px;border-radius:14px;
+background:rgba(255,255,255,0.04);
+border:1px solid rgba(255,255,255,0.08);
+cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);
+position:relative;overflow:hidden;
+}
+.nav-btn::before{
+content:'';position:absolute;inset:0;
+background:linear-gradient(135deg,transparent,rgba(124,58,237,0.15),transparent);
+opacity:0;transition:opacity .3s;
+}
+.nav-btn:hover{
+background:rgba(124,58,237,0.2);border-color:rgba(124,58,237,0.4);
+color:#fff;transform:translateY(-2px);
+box-shadow:0 4px 20px rgba(124,58,237,0.25);
+}
+.nav-btn:hover::before{opacity:1;}
+
+.nav-btn.purple-solid{
+background:linear-gradient(135deg,rgba(124,58,237,0.5),rgba(91,33,182,0.4));
+border-color:rgba(124,58,237,0.5);color:#fff;
+}
+.nav-btn.purple-solid:hover{
+background:linear-gradient(135deg,rgba(124,58,237,0.7),rgba(91,33,182,0.6));
+box-shadow:0 4px 25px rgba(124,58,237,0.4);
+}
+
+.header-right{display:flex;align-items:center;gap:8px;}
+
+/* ====== BUTTONS ====== */
+.btn{
+font-family:'Press Start 2P',monospace;
+padding:14px 28px;border-radius:16px;
+border:1px solid var(--glass-border);
+background:var(--glass);
+backdrop-filter:blur(20px);
+color:var(--text);cursor:pointer;font-size:9px;
+transition:all .3s cubic-bezier(.4,0,.2,1);
+position:relative;overflow:hidden;
+}
+.btn:hover{
+transform:translateY(-3px) scale(1.02);
+box-shadow:0 8px 30px rgba(124,58,237,0.3);
+border-color:var(--purple-l);
+background:rgba(124,58,237,0.15);
+}
+.btn:active{transform:scale(.97);transition:.1s;}
+
+.btn-primary{
+background:linear-gradient(135deg,rgba(124,58,237,0.45),rgba(91,33,182,0.35));
+border-color:rgba(124,58,237,0.45);
+box-shadow:0 4px 15px rgba(124,58,237,0.2),inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.btn-primary:hover{
+background:linear-gradient(135deg,rgba(124,58,237,0.65),rgba(91,33,182,0.55));
+box-shadow:0 8px 35px rgba(124,58,237,0.4),inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+/* ====== HERO ====== */
+.page{display:none;min-height:100vh;padding:80px 20px 40px;position:relative;z-index:1;}
+.page.active{display:block;animation:pageIn .5s cubic-bezier(.4,0,.2,1);}
+@keyframes pageIn{from{opacity:0;transform:translateY(25px);}to{opacity:1;transform:translateY(0);}}
+
+.hero{
+min-height:calc(100vh - 80px);display:flex;flex-direction:column;
+align-items:center;justify-content:center;text-align:center;padding:40px 20px;
+}
+
+.hero-label{
+display:inline-block;padding:6px 18px;border-radius:30px;
+background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.25);
+font-size:8px;color:var(--purple-l);margin-bottom:20px;
+backdrop-filter:blur(10px);animation:fadeDown .6s ease both;
+}
+
+.hero h1{
+font-size:22px;margin-bottom:14px;line-height:1.5;
+background:linear-gradient(135deg,#fff 0%,var(--purple-l) 60%,var(--purple) 100%);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+animation:fadeUp .6s ease .15s both;
+}
+.hero h1 .hl{
+background:linear-gradient(135deg,var(--purple-l),var(--pink));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+.hero .sub{
+font-size:8px;color:var(--text2);max-width:680px;margin:0 auto 28px;
+line-height:2.2;animation:fadeUp .6s ease .3s both;
+}
+
+.hero-btns{
+display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+margin-bottom:32px;animation:fadeUp .6s ease .45s both;
+transition:all .5s cubic-bezier(.4,0,.2,1);
+}
+.hero-btns.hide-up{
+opacity:0;transform:translateY(-40px);pointer-events:none;
+position:absolute;
+}
+
+/* ====== 4 SECTION BUTTONS ====== */
+.sections-grid{
+display:none;grid-template-columns:repeat(2,1fr);
+gap:16px;max-width:580px;width:100%;
+}
+.sections-grid.show{
+display:grid;animation:sectionsIn .5s cubic-bezier(.4,0,.2,1);
+}
+@keyframes sectionsIn{
+from{opacity:0;transform:scale(.92);}
+to{opacity:1;transform:scale(1);}
+}
+
+.sec-btn{
+padding:28px 18px;border-radius:20px;
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+gap:10px;cursor:pointer;font-size:9px;color:#fff;
+transition:all .3s cubic-bezier(.4,0,.2,1);
+position:relative;overflow:hidden;
+text-align:center;
+}
+.sec-btn .ic{font-size:28px;transition:transform .3s;}
+.sec-btn:hover .ic{transform:scale(1.15) translateY(-3px);}
+.sec-btn:hover{transform:scale(1.04) translateY(-4px);}
+
+.sec-btn.c1{background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);}
+.sec-btn.c1:hover{box-shadow:0 0 35px rgba(34,197,94,0.3),inset 0 0 25px rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.5);}
+
+.sec-btn.c2{background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);}
+.sec-btn.c2:hover{box-shadow:0 0 35px rgba(59,130,246,0.3),inset 0 0 25px rgba(59,130,246,0.08);border-color:rgba(59,130,246,0.5);}
+
+.sec-btn.c3{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);}
+.sec-btn.c3:hover{box-shadow:0 0 35px rgba(239,68,68,0.3),inset 0 0 25px rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.5);}
+
+.sec-btn.c4{background:rgba(234,179,8,0.12);border:1px solid rgba(234,179,8,0.25);}
+.sec-btn.c4:hover{box-shadow:0 0 35px rgba(234,179,8,0.3),inset 0 0 25px rgba(234,179,8,0.08);border-color:rgba(234,179,8,0.5);}
+
+/* ====== BRAND PILLS ====== */
+.brands{
+display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+margin-top:10px;animation:fadeUp .6s ease .6s both;
+transition:all .5s cubic-bezier(.4,0,.2,1);
+}
+.brands.push-down{margin-top:30px;}
+
+.brand-pill{
+padding:10px 22px;border-radius:30px;font-size:8px;
+color:var(--purple-l);cursor:pointer;
+background:rgba(20,10,40,0.5);
+backdrop-filter:blur(20px);
+border:1px solid var(--glass-border);
+transition:all .3s ease;
+}
+.brand-pill:hover{
+background:rgba(124,58,237,0.18);border-color:var(--purple-l);
+color:#fff;transform:scale(1.06);
+box-shadow:0 0 20px rgba(124,58,237,0.25);
+}
+
+/* ====== FEATURE CARDS (bottom 4) ====== */
+.features{padding:40px 20px;position:relative;z-index:1;}
+.features-grid{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;max-width:1000px;margin:0 auto;
+}
+.feat-card{
+padding:28px;border-radius:20px;cursor:pointer;
+background:var(--glass);backdrop-filter:blur(20px);
+border:1px solid var(--glass-border);
+transition:all .35s cubic-bezier(.4,0,.2,1);
+}
+.feat-card:hover{
+transform:translateY(-6px);
+box-shadow:0 10px 35px rgba(124,58,237,0.2);
+border-color:rgba(124,58,237,0.35);
+background:rgba(124,58,237,0.1);
+}
+.feat-card .fi{
+width:44px;height:44px;border-radius:12px;
+display:flex;align-items:center;justify-content:center;
+font-size:20px;margin-bottom:14px;
+background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.25);
+}
+.feat-card h3{font-size:9px;margin-bottom:8px;}
+.feat-card p{font-size:7px;color:var(--text2);line-height:2;}
+
+/* ====== PAGE TITLE ====== */
+.pg-title{
+font-size:18px;text-align:center;margin-bottom:35px;
+background:linear-gradient(135deg,#fff,var(--purple-l));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+/* ====== BACK BTN ====== */
+.back-btn{
+display:inline-flex;align-items:center;gap:8px;
+padding:10px 20px;border-radius:14px;margin-bottom:24px;
+background:var(--glass);backdrop-filter:blur(20px);
+border:1px solid var(--glass-border);
+color:var(--purple-l);cursor:pointer;font-size:8px;
+font-family:'Press Start 2P',monospace;
+transition:all .3s ease;
+}
+.back-btn:hover{
+background:rgba(124,58,237,0.15);transform:translateX(-4px);
+border-color:rgba(124,58,237,0.35);
+}
+
+/* ====== TABLE ====== */
+.g-table{
+width:100%;max-width:850px;margin:0 auto;
+border-collapse:separate;border-spacing:0 6px;
+}
+.g-table th{
+font-size:7px;padding:12px 18px;text-align:left;
+background:rgba(124,58,237,0.25);color:var(--text);
+backdrop-filter:blur(10px);border:none;
+}
+.g-table th:first-child{border-radius:14px 0 0 14px;}
+.g-table th:last-child{border-radius:0 14px 14px 0;}
+.g-table td{
+font-size:8px;font-family:'Press Start 2P',monospace;
+padding:12px 18px;
+background:var(--glass);backdrop-filter:blur(10px);
+border-top:1px solid var(--glass-border);
+border-bottom:1px solid var(--glass-border);
+transition:all .25s;cursor:pointer;
+}
+.g-table tr:hover td{background:rgba(124,58,237,0.12);}
+.g-table td:first-child{border-left:1px solid var(--glass-border);border-radius:14px 0 0 14px;}
+.g-table td:last-child{border-right:1px solid var(--glass-border);border-radius:0 14px 14px 0;}
+
+.online{color:var(--green);}
+.offline{color:var(--red);}
+
+/* ====== NOTEPAD (RULES) ====== */
+.notepad{
+max-width:850px;margin:0 auto;padding:28px 34px;
+background:var(--glass);backdrop-filter:blur(20px);
+border:1px solid var(--glass-border);border-radius:20px;
+}
+.notepad-section{margin-bottom:20px;}
+.notepad-section h3{
+font-size:10px;color:var(--purple-l);margin-bottom:12px;
+padding-bottom:8px;border-bottom:1px solid var(--glass-border);
+}
+.note-line{
+padding:8px 0;border-bottom:1px solid rgba(167,139,250,0.1);
+font-size:8px;color:#c4b5fd;line-height:2;
+transition:all .2s;
+}
+.note-line:hover{padding-left:8px;background:rgba(124,58,237,0.06);}
+
+/* ====== LANDMARKS ====== */
+.landmarks-wrap{max-width:950px;margin:0 auto;}
+.lm-item{
+display:flex;align-items:center;gap:24px;padding:24px;
+margin-bottom:20px;border-radius:20px;cursor:pointer;
+background:var(--glass);backdrop-filter:blur(20px);
+border:1px solid var(--glass-border);
+transition:all .35s cubic-bezier(.4,0,.2,1);
+}
+.lm-item:hover{
+transform:scale(1.015);
+box-shadow:0 8px 30px rgba(124,58,237,0.18);
+border-color:rgba(124,58,237,0.35);
+}
+.lm-item:nth-child(even){flex-direction:row-reverse;}
+
+.lm-img{
+width:260px;height:170px;border-radius:16px;flex-shrink:0;
+background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(236,72,153,0.2));
+overflow:hidden;position:relative;
+border:1px solid var(--glass-border);
+}
+.lm-img img{width:100%;height:100%;object-fit:cover;}
+.lm-txt h3{font-size:10px;margin-bottom:10px;color:#fff;}
+.lm-txt p{font-size:7px;color:var(--text2);line-height:2.2;}
+
+/* ====== DESCRIPTION (3 cols) ====== */
+.desc-row{
+display:grid;grid-template-columns:repeat(3,1fr);
+gap:20px;max-width:1050px;margin:0 auto 24px;
+}
+.desc-col{
+padding:26px;border-radius:20px;
+background:var(--glass);backdrop-filter:blur(20px);
+border:1px solid var(--glass-border);
+transition:all .35s ease;
+}
+.desc-col:hover{
+transform:translateY(-4px);
+box-shadow:0 8px 28px rgba(124,58,237,0.18);
+}
+.desc-col h3{font-size:9px;color:var(--purple-l);margin-bottom:12px;text-align:center;}
+.desc-col p{font-size:7px;color:var(--text2);line-height:2.3;}
+
+.desc-wide{
+max-width:1050px;margin:0 auto;padding:26px;
+border-radius:20px;background:var(--glass);
+backdrop-filter:blur(20px);border:1px solid var(--glass-border);
+text-align:center;
+}
+.desc-wide h3{font-size:9px;color:var(--purple-l);margin-bottom:12px;}
+.desc-wide p{font-size:7px;color:var(--text2);line-height:2.3;margin-bottom:14px;}
+
+.use-copy-btn{
+display:inline-flex;align-items:center;gap:8px;
+padding:10px 22px;border-radius:14px;
+background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);
+color:var(--purple-l);cursor:pointer;font-size:9px;
+font-family:'Press Start 2P',monospace;
+transition:all .3s;margin:6px;
+}
+.use-copy-btn:hover{background:rgba(124,58,237,0.25);}
+.use-copy-btn.copied{
+background:rgba(34,197,94,0.15)!important;
+border-color:rgba(34,197,94,0.35)!important;
+color:var(--green)!important;
+}
+
+/* ====== MODAL ====== */
+.modal-bg{
+display:none;position:fixed;inset:0;
+background:rgba(0,0,0,0.55);backdrop-filter:blur(6px);
+z-index:2000;align-items:center;justify-content:center;
+}
+.modal-bg.open{display:flex;animation:fadeIn .25s;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+.modal{
+background:rgba(15,8,35,0.92);
+backdrop-filter:blur(30px) saturate(180%);
+border:1px solid var(--glass-border2);
+border-radius:22px;padding:34px;
+max-width:500px;width:92%;max-height:85vh;overflow-y:auto;
+animation:modalIn .35s cubic-bezier(.4,0,.2,1);
+position:relative;
+}
+.modal-lg{max-width:680px;}
+@keyframes modalIn{from{opacity:0;transform:scale(.92) translateY(18px);}to{opacity:1;transform:scale(1) translateY(0);}}
+
+.modal-x{
+position:absolute;top:14px;right:14px;
+width:34px;height:34px;border-radius:50%;
+border:1px solid var(--glass-border);
+background:rgba(255,255,255,0.04);
+color:var(--text2);font-size:15px;cursor:pointer;
+display:flex;align-items:center;justify-content:center;
+transition:all .25s;font-family:sans-serif;
+}
+.modal-x:hover{background:rgba(239,68,68,0.2);color:#fff;border-color:rgba(239,68,68,0.4);}
+
+.modal h2{
+font-size:13px;margin-bottom:18px;
+background:linear-gradient(135deg,#fff,var(--purple-l));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.modal p{font-size:8px;color:var(--text2);line-height:2.2;}
+
+/* ====== AUTH FORM ====== */
+.auth-form{display:flex;flex-direction:column;gap:14px;}
+.inp-grp{position:relative;}
+.inp-grp label{font-size:7px;color:var(--purple-l);margin-bottom:5px;display:block;}
+.inp-grp input{
+width:100%;padding:11px 40px 11px 14px;border-radius:12px;
+border:1px solid var(--glass-border);
+background:rgba(255,255,255,0.04);
+color:var(--text);font-family:'Press Start 2P',monospace;font-size:8px;
+outline:none;transition:all .25s;
+}
+.inp-grp input:focus{
+border-color:var(--purple);
+box-shadow:0 0 0 3px rgba(124,58,237,0.15);
+background:rgba(124,58,237,0.06);
+}
+.eye-btn{
+position:absolute;right:10px;top:30px;cursor:pointer;
+background:none;border:none;font-size:13px;color:var(--text2);
+transition:color .2s;padding:2px;
+}
+.eye-btn:hover{color:var(--text);}
+
+/* ====== PROFILE BTN ====== */
+.prof-btn{
+display:none;align-items:center;gap:7px;
+padding:5px 12px 5px 5px;border-radius:12px;
+background:var(--glass);border:1px solid var(--glass-border);
+cursor:pointer;transition:all .25s;color:var(--text);
+font-family:'Press Start 2P',monospace;font-size:7px;
+position:relative;
+}
+.prof-btn.show{display:flex;}
+.prof-btn:hover{background:rgba(124,58,237,0.15);border-color:rgba(124,58,237,0.35);}
+.prof-btn img{width:26px;height:26px;border-radius:5px;image-rendering:pixelated;}
+
+.prof-drop{
+display:none;position:absolute;top:110%;right:0;
+background:rgba(15,8,35,0.92);backdrop-filter:blur(25px);
+border:1px solid var(--glass-border2);border-radius:14px;
+padding:6px;min-width:190px;z-index:100;
+animation:dropIn .25s ease;
+}
+.prof-drop.show{display:block;}
+@keyframes dropIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+
+.prof-drop button{
+width:100%;padding:9px 14px;border:none;background:transparent;
+color:var(--purple-l);font-family:'Press Start 2P',monospace;
+font-size:7px;cursor:pointer;border-radius:10px;text-align:left;
+transition:all .2s;
+}
+.prof-drop button:hover{background:rgba(124,58,237,0.15);color:#fff;}
+.prof-drop .logout{color:var(--red);}
+.prof-drop .logout:hover{background:rgba(239,68,68,0.12);}
+
+/* ====== ADMIN ====== */
+.adm-btn{
+padding:5px 12px;border-radius:10px;font-size:7px;
+background:linear-gradient(135deg,rgba(234,179,8,0.25),rgba(249,115,22,0.15));
+border:1px solid rgba(234,179,8,0.35);color:#fbbf24;
+font-family:'Press Start 2P',monospace;cursor:pointer;
+transition:all .3s;display:none;
+}
+.adm-btn.show{display:block;}
+.adm-btn:hover{box-shadow:0 0 18px rgba(234,179,8,0.25);transform:translateY(-2px);}
+
+.admin-sec{
+margin-bottom:24px;padding:22px;border-radius:18px;
+background:var(--glass);backdrop-filter:blur(20px);
+border:1px solid var(--glass-border);
+}
+.admin-sec h3{font-size:9px;color:#fbbf24;margin-bottom:14px;}
+.admin-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
+.admin-row input,.admin-sec textarea{
+padding:8px 12px;border-radius:10px;
+border:1px solid var(--glass-border);
+background:rgba(0,0,0,0.25);color:var(--text);
+font-family:'Press Start 2P',monospace;font-size:7px;
+outline:none;transition:border-color .2s;
+}
+.admin-row input:focus,.admin-sec textarea:focus{border-color:#fbbf24;}
+.admin-sec textarea{width:100%;min-height:80px;resize:vertical;line-height:2;}
+.admin-row input{flex:1;}
+
+.a-add{
+padding:7px 14px;border-radius:10px;font-size:7px;
+background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.25);
+color:var(--green);cursor:pointer;font-family:'Press Start 2P',monospace;
+transition:all .25s;margin-top:6px;
+}
+.a-add:hover{background:rgba(34,197,94,0.25);}
+.a-del{
+padding:4px 9px;border-radius:8px;font-size:6px;
+background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.25);
+color:var(--red);cursor:pointer;font-family:'Press Start 2P',monospace;
+transition:all .25s;
+}
+.a-del:hover{background:rgba(239,68,68,0.3);}
+
+/* ====== CHAT ====== */
+.chat-win{
+display:none;position:fixed;
+width:360px;height:480px;min-width:280px;min-height:300px;
+background:rgba(15,8,35,0.94);backdrop-filter:blur(30px);
+border:1px solid var(--glass-border2);border-radius:18px;
+z-index:1500;overflow:hidden;
+flex-direction:column;resize:both;
+box-shadow:0 12px 40px rgba(0,0,0,0.4);
+}
+.chat-win.open{display:flex;}
+.chat-head{
+padding:10px 14px;display:flex;align-items:center;justify-content:space-between;
+background:rgba(124,58,237,0.2);border-bottom:1px solid var(--glass-border);
+cursor:move;user-select:none;
+}
+.chat-head span{font-size:9px;color:var(--purple-l);}
+.chat-head button{
+background:none;border:none;color:var(--text2);
+font-size:14px;cursor:pointer;font-family:sans-serif;
+}
+.chat-head button:hover{color:#fff;}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;}
+.chat-msg{
+padding:8px 12px;border-radius:12px;
+background:rgba(255,255,255,0.04);
+border:1px solid var(--glass-border);
+font-size:7px;line-height:1.8;max-width:85%;
+animation:fadeIn .2s;
+}
+.chat-msg.mine{align-self:flex-end;background:rgba(124,58,237,0.15);border-color:rgba(124,58,237,0.3);}
+.chat-msg .sender{color:var(--purple-l);margin-bottom:3px;}
+.chat-msg .time{color:var(--text3);font-size:6px;margin-top:3px;}
+
+.chat-input-wrap{
+padding:10px;display:flex;gap:8px;
+border-top:1px solid var(--glass-border);
+}
+.chat-input-wrap input{
+flex:1;padding:9px 14px;border-radius:12px;
+border:1px solid var(--glass-border);
+background:rgba(255,255,255,0.04);
+color:var(--text);font-family:'Press Start 2P',monospace;font-size:7px;
+outline:none;
+}
+.chat-input-wrap input:focus{border-color:var(--purple);}
+.chat-input-wrap button{
+padding:9px 16px;border-radius:12px;
+background:linear-gradient(135deg,rgba(124,58,237,0.4),rgba(91,33,182,0.3));
+border:1px solid rgba(124,58,237,0.4);
+color:#fff;cursor:pointer;font-family:'Press Start 2P',monospace;font-size:7px;
+transition:all .2s;
+}
+.chat-input-wrap button:hover{background:linear-gradient(135deg,rgba(124,58,237,0.6),rgba(91,33,182,0.5));}
+
+/* ====== TOAST ====== */
+.toast{
+position:fixed;bottom:28px;right:28px;
+padding:12px 22px;border-radius:14px;
+backdrop-filter:blur(15px);
+font-family:'Press Start 2P',monospace;font-size:8px;
+z-index:3000;pointer-events:none;
+animation:toastIn .35s ease,toastOut .35s ease 2.5s forwards;
+}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@keyframes toastOut{from{opacity:1;}to{opacity:0;transform:translateY(16px);}}
+
+.toast-green{background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:var(--green);}
+.toast-red{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:var(--red);}
+
+/* ====== PROFILE MODAL ====== */
+.pm-wrap{display:flex;gap:20px;align-items:flex-start;}
+.pm-skin{width:120px;flex-shrink:0;}
+.pm-skin img{width:100%;image-rendering:pixelated;border-radius:8px;}
+.pm-info h3{font-size:12px;color:#fff;margin-bottom:6px;}
+.pm-info .pm-role{font-size:8px;padding:4px 12px;border-radius:8px;display:inline-block;margin-bottom:10px;}
+.pm-info .pm-desc{font-size:7px;color:var(--text2);line-height:2;margin-bottom:12px;}
+.pm-use{
+padding:10px 18px;border-radius:12px;
+background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);
+color:var(--purple-l);font-size:8px;cursor:pointer;
+transition:all .3s;display:inline-block;
+}
+.pm-use:hover{background:rgba(124,58,237,0.2);}
+.pm-use.copied{background:rgba(34,197,94,0.12)!important;border-color:rgba(34,197,94,0.3)!important;color:var(--green)!important;}
+
+/* ====== INFO TOOLTIP ====== */
+.info-tip{
+position:relative;display:inline-flex;align-items:center;
+cursor:help;color:var(--text3);font-size:10px;margin-right:6px;
+}
+.info-tip .tip-text{
+display:none;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);
+padding:6px 12px;border-radius:8px;
+background:rgba(15,8,35,0.92);border:1px solid var(--glass-border);
+backdrop-filter:blur(15px);
+font-size:7px;color:var(--purple-l);white-space:nowrap;
+}
+.info-tip:hover .tip-text{display:block;animation:fadeIn .2s;}
+
+/* ====== LANDMARK DETAIL MODAL ====== */
+.lm-detail-img{
+width:100%;height:200px;border-radius:16px;overflow:hidden;
+margin-bottom:14px;position:relative;
+}
+.lm-detail-img img{width:100%;height:100%;object-fit:cover;}
+.lm-detail-img .lm-detail-title{
+position:absolute;bottom:14px;left:14px;
+font-size:11px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.6);
+}
+
+/* ====== FOOTER ====== */
+.pg-footer{
+text-align:center;padding:36px 20px;margin-top:50px;
+border-top:1px solid var(--glass-border);
+}
+.pg-footer .f-brand{font-size:11px;color:var(--purple-l);margin-bottom:6px;}
+.pg-footer .f-copy{font-size:6px;color:var(--text3);margin-bottom:14px;}
+.pg-footer .f-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.pg-footer .f-links a{
+font-size:7px;color:var(--text2);text-decoration:none;
+transition:color .2s;cursor:pointer;font-family:'Press Start 2P',monospace;
+}
+.pg-footer .f-links a:hover{color:var(--purple-l);}
+
+/* ====== SCROLLBAR ====== */
+::-webkit-scrollbar{width:7px;}
+::-webkit-scrollbar-track{background:rgba(0,0,0,0.15);}
+::-webkit-scrollbar-thumb{background:rgba(124,58,237,0.35);border-radius:4px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(124,58,237,0.55);}
+
+/* ====== ANIMATIONS ====== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);}}
+
+/* ====== RESPONSIVE ====== */
+@media(max-width:768px){
+.hero h1{font-size:15px;}
+.sec-btn{padding:20px 12px;font-size:8px;}
+.desc-row{grid-template-columns:1fr;}
+.lm-item,.lm-item:nth-child(even){flex-direction:column!important;}
+.lm-img{width:100%;}
+.features-grid{grid-template-columns:1fr;}
+.pm-wrap{flex-direction:column;align-items:center;text-align:center;}
+nav{gap:4px;}
+.nav-btn{padding:6px 8px;font-size:6px;}
+}
+
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<!-- ====== HEADER ====== -->
+<header>
+<div class="logo" onclick="clk();go('home')">XazGames</div>
+<nav>
+<a class="nav-btn" onclick="clk();go('home')">Главная</a>
+<a class="nav-btn" onclick="clk();go('residents')">Жители</a>
+<a class="nav-btn" onclick="clk();go('description')">Описание</a>
+<a class="nav-btn" onclick="clk();openChat()">Чат</a>
+<a class="nav-btn" href="https://discord.gg/puGyWzpk" target="_blank" onclick="clk()">Discord</a>
+</nav>
+<div class="header-right">
+<button class="adm-btn" id="admBtn" onclick="clk();go('admin')">⚙ Админ</button>
+<button class="nav-btn" id="regNavBtn" onclick="clk();openM('regModal')">Регистрация</button>
+<button class="nav-btn purple-solid" id="loginNavBtn" onclick="clk();openM('loginModal')">Войти</button>
+<div class="prof-btn" id="profBtn" onclick="clk();toggleProfDrop()">
+<img id="profAvatar" src="">
+<span id="profNick"></span>
+<div class="prof-drop" id="profDrop">
+<button onclick="clk();openMyProfile()">Личный кабинет</button>
+<button class="logout" onclick="clk();logout()">Выйти</button>
+</div>
+</div>
+</div>
+</header>
+
+<!-- ====== HOME ====== -->
+<div class="page active" id="page-home">
+<div class="hero">
+<div class="hero-label">XazGames · by Xaz&Der1</div>
+<h1>XazGames<br><span class="hl">Официальный сайт города Хазбиково</span></h1>
+<p class="sub">Здесь вы можете ознакомиться со всей информацией о городе, а так же зайти на тест-сервер, созданный такими игроками как Xazbik_ и Der1zon by Xaz&Der1.</p>
+
+<div class="hero-btns" id="heroBtns">
+<button class="btn btn-primary" onclick="clk();showSections()">Перейти к Сайту</button>
+<button class="btn" onclick="clk();go('description')">Описание</button>
+</div>
+
+<div class="sections-grid" id="secGrid">
+<div class="sec-btn c1 glass" onclick="clk();go('residents')"><div class="ic">👤</div>Жители города</div>
+<div class="sec-btn c2 glass" onclick="clk();go('landmarks')"><div class="ic">🏛</div>Достопримечательности города</div>
+<div class="sec-btn c3 glass" onclick="clk();go('emergency')"><div class="ic">🚨</div>ЧС города</div>
+<div class="sec-btn c4 glass" onclick="clk();go('rules')"><div class="ic">📜</div>Правила города</div>
+</div>
+
+<div class="brands" id="brandsWrap">
+<div class="brand-pill" onclick="clk();openM('brandModal');showBrand('ChichVAKA')">ChichVAKA</div>
+<div class="brand-pill" onclick="clk();openM('brandModal');showBrand('Xaz&Der1')">Xaz&Der1</div>
+<div class="brand-pill" onclick="clk();openM('brandModal');showBrand('Minecraft')">Minecraft</div>
+</div>
+</div>
+
+<div class="features">
+<div class="features-grid">
+<div class="feat-card" onclick="clk();go('residents')"><div class="fi">👤</div><h3>Жители города</h3><p>Все жители Хазбиково</p></div>
+<div class="feat-card" onclick="clk();go('landmarks')"><div class="fi">🏛</div><h3>Достопримечательности</h3><p>Уникальные постройки</p></div>
+<div class="feat-card" onclick="clk();go('emergency')"><div class="fi">🚨</div><h3>ЧС города</h3><p>Чрезвычайные ситуации</p></div>
+<div class="feat-card" onclick="clk();go('rules')"><div class="fi">📜</div><h3>Правила города</h3><p>Правила для жителей</p></div>
+</div>
+</div>
+</div>
+
+<!-- ====== RESIDENTS ====== -->
+<div class="page" id="page-residents">
+<button class="back-btn" onclick="clk();goBack()">← Назад</button>
+<h1 class="pg-title">Жители города</h1>
+<table class="g-table"><thead><tr><th>#</th><th>Никнейм</th><th>Роль</th><th>Статус</th></tr></thead>
+<tbody id="resBody"></tbody></table>
+</div>
+
+<!-- ====== LANDMARKS ====== -->
+<div class="page" id="page-landmarks">
+<button class="back-btn" onclick="clk();goBack()">← Назад</button>
+<h1 class="pg-title">Достопримечательности города</h1>
+<div class="landmarks-wrap" id="lmWrap"></div>
+</div>
+
+<!-- ====== EMERGENCY ====== -->
+<div class="page" id="page-emergency">
+<button class="back-btn" onclick="clk();goBack()">← Назад</button>
+<h1 class="pg-title">ЧС города</h1>
+<table class="g-table"><thead><tr><th>#</th><th>Никнейм</th><th>Событие</th><th>Статус</th></tr></thead>
+<tbody id="emBody"></tbody></table>
+</div>
+
+<!-- ====== RULES ====== -->
+<div class="page" id="page-rules">
+<button class="back-btn" onclick="clk();goBack()">← Назад</button>
+<h1 class="pg-title">Правила города</h1>
+<div class="notepad" id="rulesPad"></div>
+</div>
+
+<!-- ====== DESCRIPTION ====== -->
+<div class="page" id="page-description">
+<button class="back-btn" onclick="clk();goBack()">← Назад</button>
+<h1 class="pg-title">Описание</h1>
+<div class="desc-row" id="descRow"></div>
+<div class="desc-wide" style="margin-top:20px;">
+<h3>Связаться с мэром</h3>
+<p>По всем вопросам обращайтесь к мэру города Хазбиково.</p>
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+<div class="use-copy-btn" onclick="clk();copyText('@lostyy43',this)">Юз: @lostyy43</div>
+<button class="btn" style="padding:10px 20px;font-size:8px;" onclick="clk();openChat()">Чат</button>
+</div>
+</div>
+</div>
+
+<!-- ====== ADMIN ====== -->
+<div class="page" id="page-admin">
+<button class="back-btn" onclick="clk();goBack()">← Назад</button>
+<h1 class="pg-title" style="background:linear-gradient(135deg,#fbbf24,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Админ-панель</h1>
+<div id="adminContent"></div>
+</div>
+
+<!-- ====== MODALS ====== -->
+
+<!-- Register -->
+<div class="modal-bg" id="regModal">
+<div class="modal">
+<button class="modal-x" onclick="closeM('regModal')">✕</button>
+<h2>Регистрация</h2>
+<form class="auth-form" onsubmit="return doReg(event)">
+<div class="inp-grp"><label>Ник в Minecraft</label><input id="rNick" required minlength="3" maxlength="16" placeholder="Ваш ник..."></div>
+<div class="inp-grp"><label>Электронная почта</label><input id="rEmail" type="email" required placeholder="email@example.com"></div>
+<div class="inp-grp"><label>Пароль</label><input id="rPass" type="password" required minlength="4" placeholder="Пароль..."><button type="button" class="eye-btn" onmousedown="showP('rPass',this)" onmouseup="hideP('rPass',this)" onmouseleave="hideP('rPass',this)">👁‍🗨</button></div>
+<p style="font-size:6px;color:var(--text3);line-height:1.8;">После регистрации подтвердите аккаунт через Telegram-бота <a href="https://t.me/Xazbikovo_bot" target="_blank" style="color:var(--purple-l);">@Xazbikovo_bot</a></p>
+<button type="submit" class="btn btn-primary" style="width:100%;">Зарегистрироваться</button>
+</form>
+</div>
+</div>
+
+<!-- Login -->
+<div class="modal-bg" id="loginModal">
+<div class="modal">
+<button class="modal-x" onclick="closeM('loginModal')">✕</button>
+<h2>Вход</h2>
+<form class="auth-form" onsubmit="return doLogin(event)">
+<div class="inp-grp"><label>Ник в Minecraft</label><input id="lNick" required placeholder="Ваш ник..."></div>
+<div class="inp-grp"><label>Пароль</label><input id="lPass" type="password" required placeholder="Пароль..."><button type="button" class="eye-btn" onmousedown="showP('lPass',this)" onmouseup="hideP('lPass',this)" onmouseleave="hideP('lPass',this)">👁‍🗨</button></div>
+<button type="submit" class="btn btn-primary" style="width:100%;">Войти</button>
+<button type="button" class="btn" style="width:100%;font-size:7px;padding:10px;" onclick="clk();toast('Восстановление: напишите на почту или @Xazbikovo_bot','green')">Восстановить пароль</button>
+</form>
+</div>
+</div>
+
+<!-- Brand -->
+<div class="modal-bg" id="brandModal">
+<div class="modal">
+<button class="modal-x" onclick="closeM('brandModal')">✕</button>
+<h2 id="brandTitle"></h2>
+<p id="brandText"></p>
+</div>
+</div>
+
+<!-- Player Profile -->
+<div class="modal-bg" id="playerModal">
+<div class="modal modal-lg">
+<button class="modal-x" onclick="closeM('playerModal')">✕</button>
+<div class="pm-wrap" id="pmContent"></div>
+</div>
+</div>
+
+<!-- Landmark Detail -->
+<div class="modal-bg" id="lmModal">
+<div class="modal modal-lg">
+<button class="modal-x" onclick="closeM('lmModal')">✕</button>
+<div id="lmDetail"></div>
+</div>
+</div>
+
+<!-- Chat Auth Required -->
+<div class="modal-bg" id="chatAuthModal">
+<div class="modal" style="text-align:center;">
+<button class="modal-x" onclick="closeM('chatAuthModal')">✕</button>
+<h2>Чат</h2>
+<p style="margin-bottom:16px;">Чтобы писать в чат, зарегистрируйтесь или войдите в профиль.</p>
+<div style="display:flex;gap:12px;justify-content:center;">
+<button class="btn" onclick="closeM('chatAuthModal');openM('regModal');clk()">Регистрация</button>
+<button class="btn btn-primary" onclick="closeM('chatAuthModal');openM('loginModal');clk()">Войти</button>
+</div>
+</div>
+</div>
+
+<!-- Soon -->
+<div class="modal-bg" id="soonModal">
+<div class="modal" style="text-align:center;">
+<button class="modal-x" onclick="closeM('soonModal')">✕</button>
+<h2>Скоро</h2>
+<p>Скоро будет доступно.</p>
+</div>
+</div>
+
+<!-- ====== CHAT WINDOW ====== -->
+<div class="chat-win" id="chatWin">
+<div class="chat-head" id="chatHead">
+<span>Чат Хазбиково</span>
+<button onclick="closeChat()">✕</button>
+</div>
+<div class="chat-msgs" id="chatMsgs"></div>
+<div class="chat-input-wrap">
+<input id="chatInput" placeholder="Сообщение..." onkeydown="if(event.key==='Enter')sendMsg()">
+<button onclick="sendMsg()">→</button>
+</div>
+</div>
+
+<script>
+// ====== AUDIO ======
+const AC=window.AudioContext||window.webkitAudioContext;
+let ac;
+function clk(){
+try{
+if(!ac)ac=new AC();
+const o=ac.createOscillator(),g=ac.createGain();
+o.connect(g);g.connect(ac.destination);
+o.type='sine';
+o.frequency.setValueAtTime(900,ac.currentTime);
+o.frequency.exponentialRampToValueAtTime(1300,ac.currentTime+.04);
+o.frequency.exponentialRampToValueAtTime(700,ac.currentTime+.09);
+g.gain.setValueAtTime(.06,ac.currentTime);
+g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);
+o.start(ac.currentTime);o.stop(ac.currentTime+.12);
+}catch(e){}
+}
+
+function welcomeSound(){
+try{
+if(!ac)ac=new AC();
+const notes=[523,659,784,1047];
+notes.forEach((f,i)=>{
+const o=ac.createOscillator(),g=ac.createGain();
+o.connect(g);g.connect(ac.destination);
+o.type='sine';o.frequency.value=f;
+g.gain.setValueAtTime(0,ac.currentTime+i*.12);
+g.gain.linearRampToValueAtTime(.04,ac.currentTime+i*.12+.04);
+g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+i*.12+.35);
+o.start(ac.currentTime+i*.12);
+o.stop(ac.currentTime+i*.12+.35);
+});
+}catch(e){}
+}
+
+if(!sessionStorage.getItem('xg_welcomed')){
+setTimeout(()=>{welcomeSound();sessionStorage.setItem('xg_welcomed','1');},300);
+}
+
+// ====== PARTICLES ======
+(function(){
+const c=document.getElementById('particles');
+for(let i=0;i<35;i++){
+const p=document.createElement('div');p.className='particle';
+p.style.left=Math.random()*100+'%';
+p.style.animationDuration=(7+Math.random()*12)+'s';
+p.style.animationDelay=Math.random()*10+'s';
+const s=2+Math.random()*3;
+p.style.width=p.style.height=s+'px';
+c.appendChild(p);
+}
+})();
+
+// ====== DATA ======
+function gd(k,d){try{const v=localStorage.getItem('xg_'+k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function sd(k,v){localStorage.setItem('xg_'+k,JSON.stringify(v));}
+
+const PLAYERS_DEFAULT=[
+{nick:'Xazbik_',role:'Мэр',status:'Онлайн',desc:'Основатель и мэр города Хазбиково. Создатель компании Xaz&Der1.',use:'@lostyy43',color:'#7c3aed'},
+{nick:'Der1zon',role:'Зам. мэра',status:'Оффлайн',desc:'Заместитель мэра и соучредитель Xaz&Der1. Лучший друг Xazbik_.',use:'@der1zon',color:'#3b82f6'},
+{nick:'AstraLch1k',role:'Архитектор',status:'Оффлайн',desc:'Главный архитектор города Хазбиково.',use:'@Astrals',color:'#f97316'},
+{nick:'nikita_2022',role:'Школьник',status:'Оффлайн',desc:'Житель города, школьник.',use:'@nikita_22120',color:'#eab308'},
+{nick:'se1hhyt',role:'Житель',status:'Оффлайн',desc:'Активный житель города Хазбиково.',use:'@se1hhyt',color:'#22c55e'},
+{nick:'romdedd',role:'Житель',status:'Оффлайн',desc:'Житель города Хазбиково.',use:'@romdedd',color:'#06b6d4'}
+];
+
+const EM_DEFAULT=[
+{nick:'reclomad',event:'Довёл мэра и был кикнут',status:'Кикнут'}
+];
+
+const LM_DEFAULT=[
+{name:'Москва-Сити',desc:'Современный деловой центр города Хазбиково с высотными зданиями из стекла и бетона. Главный экономический район.',img:'м.JPG',architect:'Xazbik_',builders:'Xazbik_, Der1zon, reclomad'},
+{name:'Центральная площадь',desc:'Красивая площадь в самом сердце города с фонтаном, скамейками и зелёными зонами. Место встреч всех жителей.',img:'ц.JPG',architect:'Xazbik_',builders:'Xazbik_, Der1zon'},
+{name:'Суд',desc:'Здание суда города Хазбиково, где решаются все спорные вопросы и конфликты между жителями. Справедливость прежде всего.',img:'с.JPG',architect:'Xazbik_',builders:'Xazbik_, Der1zon'},
+{name:'Портал',desc:'Мистический портал на окраине города, ведущий в неизведанные измерения. Построен по древним чертежам из интернета.',img:'п.JPG',architect:'Интернет',builders:'Xazbik_, Забытый Игрок'},
+{name:'Офис Xazbik_',desc:'Личный рабочий кабинет мэра города. Здесь принимаются все важные решения и планируется развитие Хазбиково.',img:'о.JPG',architect:'AstraLch1k',builders:'Xazbik_, Der1zon, reclomad'}
+];
+
+const DESC_DEFAULT=[
+{title:'Вся информация о сайте',text:'Сайт был создан компанией Xaz&Der1 специально для города \'Хазбиково\' на сервере ChichVAKA. Наш сайт создан, чтобы познакомить вас с уникальными чертами города.\n\nНа сайте можно найти: Жители города, Тест-сервер города, Правила города, Достопримечательности города и многое другое.\n\nПутешествуйте с удовольствием — Хазбиково ждёт вас!'},
+{title:'Для чего был создан сайт?',text:'Сайт был создан в исключительно информационных целях — для обеспечения открытого и оперативного доступа жителей, гостей города и представителей организаций к достоверным сведениям о деятельности органов местного самоуправления, городских программах, мероприятиях и услугах.\n\nНикого и ничего мы не хотели задеть или оскорбить, все совпадения случайны.'},
+{title:'О компании Xaz&Der1',text:'Компания Xaz&Der1 начала своё производство совсем недавно. В компанию входят игроки ChichVAKA Xazbik_ и Der1zon. Они лучшие друзья и всегда на сервере и не только играли вместе.\n\nВсё начиналось ещё очень давно, как игрок Xazbik_ создал свой город и нашёл друга Der1zon, с которым был знаком ещё с первого сезона сервера. Они начали общаться в тг и дс ежедневно.\n\nВпервые создали свой Дискорд-сервер 10.02.2026. Тест-сервер в Minecraft — 01.03.2026. А уже 20.03.2026 года игроку Xazbik_ пришла идея создать сайт города.\n\nВот так и появился данный сайт от компании Xaz&Der1.'}
+];
+
+const BRANDS={
+'ChichVAKA':'ChichVAKA — это сервер ванила+ режим с элементами экономики и РП, созданный для контента на стримах и зрителей стримеров. На нём есть много разных людей, государств и городов. Самый лучший рп-сервер по мнению Xazbik_.',
+'Xaz&Der1':'Компания Xaz&Der1 начала своё производство совсем недавно. В компанию входят игроки ChichVAKA Xazbik_ и Der1zon. Они лучшие друзья и всегда на сервере и не только играли вместе. Всё начиналось ещё очень давно, как игрок Xazbik_ создал свой город и нашёл друга Der1zon. Впервые создали свой Дискорд-сервер 10.02.2026. После чего создали свой первый Тест-сервер в Minecraft 01.03.2026. А уже 20.03.2026 года игроку Xazbik_ пришла идея создать сайт города. Вот так и появился данный сайт от компании Xaz&Der1.',
+'Minecraft':'Minecraft — игра-песочница с процедурно генерируемым миром из блоков. Здесь нет фиксированного сюжета или строгих правил. Каждый новый мир уникален: горы, леса, океаны, пещеры и даже подземные крепости появляются случайно.'
+};
+
+const RULES_TEXT=`ПРАВИЛА ГОРОДА ХАЗБИКОВО:
+1. Соблюдать правила сервера
+2.1 Не гриферить
+2.2 Не воровать
+2.3 Не драться где попало
+3. Хорошо себя вести
+4. Помогать друг другу
+5.1 Развивать город
+5.2 Приглашать вступить других
+6.1 Слушаться мэра Xazbik_
+6.2 Любить и уважать мэра
+
+На территории Москва-сити запрещается:
+1. Использование взрывоопасных предметов: ТНТ, кристаллов Края, зарядов ветра.
+2. Использование источников огня: огнива, оружия с зачарованием «Заговор огня», а также лука с зачарованием «Воспламенение».
+3. Разливание воды
+4. Применение булавы
+5. Провоцирование драк и ведение боя в непредназначенных для этого местах.
+6. Использование любых иных предметов, механизмов или действий, способных причинить вред игрокам или постройкам.
+
+ПРОСЬБА:
+1. Соблюдать правила
+2.1 Помогать городу и жителям
+2.2 Развивать город
+3.1 Быть не афк
+3.2 Быть активным в тг города
+4. Покупать лицензию для ларьков и магазинов`;
+
+// Init data
+if(!gd('players',null))sd('players',PLAYERS_DEFAULT);
+if(!gd('emergency',null))sd('emergency',EM_DEFAULT);
+if(!gd('landmarks',null))sd('landmarks',LM_DEFAULT);
+if(!gd('descs',null))sd('descs',DESC_DEFAULT);
+if(!gd('brands',null))sd('brands',BRANDS);
+if(!gd('rules',null))sd('rules',RULES_TEXT);
+if(!gd('users',null))sd('users',[]);
+if(!gd('chatMsgs',null))sd('chatMsgs',[]);
+if(!gd('mods',null))sd('mods',[]);
+if(!gd('modLog',null))sd('modLog',[]);
+
+// ====== NAV ======
+let history=['home'];
+let secOpen=false;
+
+function go(p){
+if(history[history.length-1]!==p)history.push(p);
+document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+const el=document.getElementById('page-'+p);
+if(el){el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});render(p);addFooter(el);}
+}
+
+function goBack(){
+if(history.length>1){history.pop();go(history.pop());}
+else go('home');
+}
+
+function addFooter(el){
+if(el.querySelector('.pg-footer'))return;
+const f=document.createElement('div');f.className='pg-footer';
+f.innerHTML=`<div class="f-brand">XAZBGAMES.RU</div>
+<div class="f-copy">© 2026 Хазбиково. Все права защищены.</div>
+<div class="f-links">
+<a onclick="clk();go('home')">Главная</a>
+<a onclick="clk();go('residents')">Жители</a>
+<a onclick="clk();go('description')">Описание</a>
+<a href="https://discord.gg/puGyWzpk" target="_blank" onclick="clk()">Discord</a>
+</div>`;
+el.appendChild(f);
+}
+
+function showSections(){
+const btns=document.getElementById('heroBtns');
+const grid=document.getElementById('secGrid');
+const br=document.getElementById('brandsWrap');
+if(!secOpen){
+btns.classList.add('hide-up');
+grid.classList.add('show');
+br.classList.add('push-down');
+secOpen=true;
+}else{
+btns.classList.remove('hide-up');
+grid.classList.remove('show');
+br.classList.remove('push-down');
+secOpen=false;
+}
+}
+
+// ====== RENDER ======
+function render(p){
+if(p==='residents')renderRes();
+else if(p==='emergency')renderEm();
+else if(p==='rules')renderRules();
+else if(p==='landmarks')renderLm();
+else if(p==='description')renderDesc();
+else if(p==='admin')renderAdmin();
+}
+
+function renderRes(){
+const d=gd('players',[]);
+document.getElementById('resBody').innerHTML=d.map((r,i)=>`
+<tr style="animation:fadeUp .35s ease ${i*.06}s both" onclick="clk();openPlayer(${i})">
+<td>${i+1}</td><td>${r.nick}</td><td>${r.role}</td>
+<td><span class="${r.status==='Онлайн'?'online':'offline'}">${r.status}</span></td>
+</tr>`).join('');
+}
+
+function renderEm(){
+const d=gd('emergency',[]);
+document.getElementById('emBody').innerHTML=d.map((r,i)=>`
+<tr style="animation:fadeUp .35s ease ${i*.06}s both">
+<td>${i+1}</td><td>${r.nick}</td>
+<td style="color:var(--red);line-height:2;">${r.event}</td>
+<td><span style="color:var(--orange)">${r.status}</span></td>
+</tr>`).join('');
+}
+
+function renderRules(){
+const txt=gd('rules',RULES_TEXT);
+const lines=txt.split('\n');
+const pad=document.getElementById('rulesPad');
+let html='';
+lines.forEach((l,i)=>{
+if(l.trim()===''){ html+='<div style="height:10px;"></div>'; return; }
+const isHead=l.endsWith(':')||l.startsWith('ПРАВИЛА')||l.startsWith('На территории')||l.startsWith('ПРОСЬБА');
+if(isHead){
+html+=`<div class="notepad-section" style="animation:fadeUp .3s ease ${i*.03}s both"><h3>${l}</h3></div>`;
+}else{
+html+=`<div class="note-line" style="animation:fadeUp .3s ease ${i*.03}s both">${l}</div>`;
+}
+});
+pad.innerHTML=html;
+}
+
+function renderLm(){
+const d=gd('landmarks',[]);
+document.getElementById('lmWrap').innerHTML=d.map((l,i)=>`
+<div class="lm-item" style="animation:fadeUp .4s ease ${i*.1}s both" onclick="clk();openLm(${i})">
+<div class="lm-img"><img src="${l.img}" onerror="this.style.display='none';this.parentElement.innerHTML+='<div style=\\'display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:36px;opacity:.4;\\'>🏛</div>'"></div>
+<div class="lm-txt"><h3>${l.name}</h3><p>${l.desc}</p></div>
+</div>`).join('');
+}
+
+function renderDesc(){
+const d=gd('descs',DESC_DEFAULT);
+document.getElementById('descRow').innerHTML=d.map((c,i)=>`
+<div class="desc-col glass" style="animation:fadeUp .4s ease ${i*.12}s both">
+<h3>${c.title}</h3>
+<p>${c.text.replace(/\n/g,'<br>')}</p>
+</div>`).join('');
+}
+
+// ====== PLAYER PROFILE ======
+function openPlayer(i){
+const d=gd('players',[]);
+const p=d[i];if(!p)return;
+const roleColor=p.color||'var(--purple)';
+document.getElementById('pmContent').innerHTML=`
+<div class="pm-skin">
+<img src="https://mc-heads.net/body/${encodeURIComponent(p.nick)}/200" onerror="this.src='https://mc-heads.net/avatar/${encodeURIComponent(p.nick)}/120'">
+</div>
+<div class="pm-info">
+<span class="info-tip">ℹ<span class="tip-text">Информация о игроке</span></span>
+<h3>${p.nick}</h3>
+<div class="pm-role" style="background:${roleColor}33;border:1px solid ${roleColor}55;color:${roleColor};">${p.role}</div>
+<div class="pm-desc">${p.desc||'Нет описания.'}</div>
+<div class="pm-use" onclick="clk();copyUse(this,'${p.use}')" style="color:var(--purple-l);">Юз: ${p.use}</div>
+</div>`;
+openM('playerModal');
+}
+
+function copyUse(el,use){
+navigator.clipboard.writeText(use).catch(()=>{});
+el.textContent='Скопировано!';
+el.classList.add('copied');
+setTimeout(()=>{el.textContent='Юз: '+use;el.classList.remove('copied');},2000);
+}
+
+function openMyProfile(){
+const u=gd('cur',null);if(!u)return;
+const players=gd('players',[]);
+const p=players.find(x=>x.nick.toLowerCase()===u.nick.toLowerCase())||{nick:u.nick,role:'Пользователь',desc:'',use:'@'+u.nick.toLowerCase(),color:'var(--purple)'};
+const roleColor=p.color||'var(--purple)';
+document.getElementById('pmContent').innerHTML=`
+<div class="pm-skin">
+<img src="https://mc-heads.net/body/${encodeURIComponent(u.nick)}/200" onerror="this.src='https://mc-heads.net/avatar/${encodeURIComponent(u.nick)}/120'">
+</div>
+<div class="pm-info">
+<span class="info-tip">ℹ<span class="tip-text">Информация о игроке</span></span>
+<h3>${u.nick}</h3>
+<div class="pm-role" style="background:${roleColor}33;border:1px solid ${roleColor}55;color:${roleColor};">${p.role}</div>
+<div class="pm-desc">${p.desc||''}</div>
+<div style="font-size:7px;color:var(--text3);margin-bottom:8px;">${u.email}</div>
+<div class="pm-use" onclick="clk();copyUse(this,'${p.use}')" style="color:var(--purple-l);">Юз: ${p.use}</div>
+</div>`;
+closeProfDrop();
+openM('playerModal');
+}
+
+// ====== LANDMARK DETAIL ======
+function openLm(i){
+const d=gd('landmarks',[]);
+const l=d[i];if(!l)return;
+document.getElementById('lmDetail').innerHTML=`
+<div class="lm-detail-img">
+<img src="${l.img}" onerror="this.style.display='none'">
+<div class="lm-detail-title">${l.name}</div>
+</div>
+<p style="margin-bottom:10px;">${l.desc}</p>
+<p style="color:var(--purple-l);font-size:8px;">Архитектор: ${l.architect}</p>
+<p style="color:var(--text2);font-size:7px;">Строители: ${l.builders}</p>`;
+openM('lmModal');
+}
+
+// ====== BRANDS ======
+function showBrand(name){
+const b=gd('brands',BRANDS);
+document.getElementById('brandTitle').textContent=name;
+document.getElementById('brandText').textContent=b[name]||'';
+}
+
+// ====== MODAL ======
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');clk();}
+document.querySelectorAll('.modal-bg').forEach(m=>{
+m.addEventListener('click',e=>{if(e.target===m){m.classList.remove('open');clk();}});
+});
+
+// ====== EYE TOGGLE ======
+function showP(id,btn){document.getElementById(id).type='text';btn.textContent='👁';}
+function hideP(id,btn){document.getElementById(id).type='password';btn.textContent='👁‍🗨';}
+
+// ====== AUTH ======
+function doReg(e){
+e.preventDefault();
+const nick=document.getElementById('rNick').value.trim();
+const email=document.getElementById('rEmail').value.trim();
+const pass=document.getElementById('rPass').value;
+let users=gd('users',[]);
+if(users.find(u=>u.nick.toLowerCase()===nick.toLowerCase())){toast('Ник уже занят!','red');return false;}
+users.push({nick,email,pass});
+sd('users',users);
+closeM('regModal');
+toast('Регистрация успешна! Подтвердите через @Xazbikovo_bot','green');
+document.getElementById('rNick').value='';
+document.getElementById('rEmail').value='';
+document.getElementById('rPass').value='';
+return false;
+}
+
+function doLogin(e){
+e.preventDefault();
+const nick=document.getElementById('lNick').value.trim();
+const pass=document.getElementById('lPass').value;
+const users=gd('users',[]);
+const u=users.find(x=>x.nick===nick&&x.pass===pass);
+if(!u){toast('Неверный ник или пароль!','red');return false;}
+sd('cur',u);closeM('loginModal');updAuth();
+toast('Добро пожаловать, '+nick+'!','green');
+return false;
+}
+
+function logout(){
+localStorage.removeItem('xg_cur');updAuth();closeProfDrop();
+toast('Вы вышли.','green');
+if(document.getElementById('page-admin').classList.contains('active'))go('home');
+}
+
+function updAuth(){
+const u=gd('cur',null);
+const rb=document.getElementById('regNavBtn');
+const lb=document.getElementById('loginNavBtn');
+const pb=document.getElementById('profBtn');
+const ab=document.getElementById('admBtn');
+if(u){
+rb.style.display='none';lb.style.display='none';
+pb.classList.add('show');
+document.getElementById('profNick').textContent=u.nick;
+document.getElementById('profAvatar').src='https://mc-heads.net/avatar/'+encodeURIComponent(u.nick)+'/26';
+if(u.nick==='Xazbik_'||gd('mods',[]).includes(u.nick)){ab.classList.add('show');}
+else{ab.classList.remove('show');}
+}else{
+rb.style.display='';lb.style.display='';
+pb.classList.remove('show');
+ab.classList.remove('show');
+}
+}
+
+function toggleProfDrop(){document.getElementById('profDrop').classList.toggle('show');}
+function closeProfDrop(){document.getElementById('profDrop').classList.remove('show');}
+document.addEventListener('click',e=>{
+if(!e.target.closest('#profBtn'))closeProfDrop();
+});
+
+// ====== CHAT ======
+let chatDrag=false,chatOX=0,chatOY=0;
+
+function openChat(){
+const u=gd('cur',null);
+if(!u){openM('chatAuthModal');return;}
+const cw=document.getElementById('chatWin');
+if(!cw.classList.contains('open')){
+cw.classList.add('open');
+cw.style.bottom='20px';cw.style.right='20px';
+cw.style.left='auto';cw.style.top='auto';
+renderChat();
+}
+}
+function closeChat(){document.getElementById('chatWin').classList.remove('open');clk();}
+
+function renderChat(){
+const msgs=gd('chatMsgs',[]);
+const box=document.getElementById('chatMsgs');
+const u=gd('cur',null);
+box.innerHTML=msgs.map(m=>`
+<div class="chat-msg ${u&&m.sender===u.nick?'mine':''}">
+<div class="sender" style="color:var(--purple-l);">${m.sender}</div>
+<div>${m.text}</div>
+<div class="time" style="color:var(--text3);">${m.time}</div>
+</div>`).join('');
+box.scrollTop=box.scrollHeight;
+}
+
+function sendMsg(){
+const u=gd('cur',null);if(!u)return;
+const inp=document.getElementById('chatInput');
+const txt=inp.value.trim();if(!txt)return;
+const msgs=gd('chatMsgs',[]);
+const now=new Date();
+const time=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+msgs.push({sender:u.nick,text:txt,time});
+sd('chatMsgs',msgs);
+inp.value='';
+renderChat();clk();
+}
+
+// Chat drag
+const chatHead=document.getElementById('chatHead');
+chatHead.addEventListener('mousedown',e=>{
+chatDrag=true;
+const cw=document.getElementById('chatWin');
+const r=cw.getBoundingClientRect();
+chatOX=e.clientX-r.left;chatOY=e.clientY-r.top;
+cw.style.right='auto';cw.style.bottom='auto';
+});
+document.addEventListener('mousemove',e=>{
+if(!chatDrag)return;
+const cw=document.getElementById('chatWin');
+cw.style.left=(e.clientX-chatOX)+'px';
+cw.style.top=(e.clientY-chatOY)+'px';
+});
+document.addEventListener('mouseup',()=>{chatDrag=false;});
+
+// ====== TOAST ======
+function toast(msg,type){
+const t=document.createElement('div');
+t.className='toast toast-'+(type||'green');
+t.textContent=msg;document.body.appendChild(t);
+setTimeout(()=>t.remove(),3200);
+}
+
+// ====== COPY TEXT ======
+function copyText(txt,el){
+navigator.clipboard.writeText(txt).catch(()=>{});
+const orig=el.textContent;
+el.textContent='Скопировано!';el.classList.add('copied');
+setTimeout(()=>{el.textContent=orig;el.classList.remove('copied');},2000);
+clk();
+}
+
+// ====== ADMIN ======
+function renderAdmin(){
+const u=gd('cur',null);
+const mods=gd('mods',[]);
+if(!u||(u.nick!=='Xazbik_'&&!mods.includes(u.nick))){go('home');toast('Доступ запрещён!','red');return;}
+
+const players=gd('players',[]);
+const emergency=gd('emergency',[]);
+const landmarks=gd('landmarks',[]);
+const descs=gd('descs',[]);
+const rules=gd('rules','');
+const brands=gd('brands',{});
+const users=gd('users',[]);
+const isOwner=u.nick==='Xazbik_';
+
+let html='';
+
+// Players
+html+=`<div class="admin-sec"><h3>Жители города</h3><div id="aPlayers">`;
+players.forEach((p,i)=>{
+html+=`<div class="admin-row">
+<input value="${p.nick}" onchange="aUpd('players',${i},'nick',this.value)" placeholder="Ник">
+<input value="${p.role}" onchange="aUpd('players',${i},'role',this.value)" placeholder="Роль">
+<input value="${p.status}" onchange="aUpd('players',${i},'status',this.value)" placeholder="Статус" style="width:90px;">
+<input value="${p.use||''}" onchange="aUpd('players',${i},'use',this.value)" placeholder="Юз" style="width:100px;">
+<input value="${p.color||'#7c3aed'}" onchange="aUpd('players',${i},'color',this.value)" placeholder="#цвет" style="width:80px;">
+<button class="a-del" onclick="clk();aDel('players',${i})">✕</button>
+</div>
+<div class="admin-row"><input value="${p.desc||''}" onchange="aUpd('players',${i},'desc',this.value)" placeholder="Описание" style="width:100%"></div>`;
+});
+html+=`</div><button class="a-add" onclick="clk();aAdd('players')">+ Добавить</button></div>`;
+
+// Emergency
+html+=`<div class="admin-sec"><h3>ЧС города</h3><div id="aEm">`;
+emergency.forEach((e,i)=>{
+html+=`<div class="admin-row">
+<input value="${e.nick}" onchange="aUpd('emergency',${i},'nick',this.value)" placeholder="Ник">
+<input value="${e.event}" onchange="aUpd('emergency',${i},'event',this.value)" placeholder="Событие">
+<input value="${e.status}" onchange="aUpd('emergency',${i},'status',this.value)" placeholder="Статус" style="width:100px;">
+<button class="a-del" onclick="clk();aDel('emergency',${i})">✕</button>
+</div>`;
+});
+html+=`</div><button class="a-add" onclick="clk();aAdd('emergency')">+ Добавить</button></div>`;
+
+// Landmarks
+html+=`<div class="admin-sec"><h3>Достопримечательности</h3><div id="aLm">`;
+landmarks.forEach((l,i)=>{
+html+=`<div style="margin-bottom:14px;padding:14px;border-radius:14px;background:rgba(0,0,0,0.2);">
+<div class="admin-row">
+<input value="${l.name}" onchange="aUpd('landmarks',${i},'name',this.value)" placeholder="Название">
+<input value="${l.img||''}" onchange="aUpd('landmarks',${i},'img',this.value)" placeholder="Файл фото" style="width:100px;">
+<button class="a-del" onclick="clk();aDel('landmarks',${i})">✕</button>
+</div>
+<div class="admin-row">
+<input value="${l.architect}" onchange="aUpd('landmarks',${i},'architect',this.value)" placeholder="Архитектор">
+<input value="${l.builders}" onchange="aUpd('landmarks',${i},'builders',this.value)" placeholder="Строители">
+</div>
+<textarea onchange="aUpd('landmarks',${i},'desc',this.value)" placeholder="Описание">${l.desc}</textarea>
+</div>`;
+});
+html+=`</div><button class="a-add" onclick="clk();aAdd('landmarks')">+ Добавить</button></div>`;
+
+// Descriptions
+html+=`<div class="admin-sec"><h3>Описание (столбики)</h3><div id="aDesc">`;
+descs.forEach((d,i)=>{
+html+=`<div style="margin-bottom:12px;padding:12px;border-radius:12px;background:rgba(0,0,0,0.2);">
+<div class="admin-row"><input value="${d.title}" onchange="aUpd('descs',${i},'title',this.value)" placeholder="Заголовок" style="width:100%"><button class="a-del" onclick="clk();aDel('descs',${i})">✕</button></div>
+<textarea onchange="aUpd('descs',${i},'text',this.value)" placeholder="Текст">${d.text}</textarea>
+</div>`;
+});
+html+=`</div><button class="a-add" onclick="clk();aAdd('descs')">+ Добавить</button></div>`;
+
+// Rules
+html+=`<div class="admin-sec"><h3>Правила</h3>
+<textarea style="min-height:250px;" onchange="sd('rules',this.value)">${rules}</textarea></div>`;
+
+// Brands
+html+=`<div class="admin-sec"><h3>Описания кнопок</h3>`;
+Object.entries(brands).forEach(([n,t])=>{
+html+=`<div style="margin-bottom:8px;"><label style="font-size:7px;color:var(--purple-l);">${n}</label>
+<textarea onchange="aUpdBrand('${n}',this.value)">${t}</textarea></div>`;
+});
+html+=`</div>`;
+
+// Users (owner only)
+if(isOwner){
+html+=`<div class="admin-sec"><h3>Зарегистрированные пользователи</h3>`;
+users.forEach((us,i)=>{
+html+=`<div class="admin-row">
+<input value="${us.nick}" onchange="aUpdUser(${i},'nick',this.value)">
+<input value="${us.email}" onchange="aUpdUser(${i},'email',this.value)" style="width:160px;">
+<input value="${us.pass}" onchange="aUpdUser(${i},'pass',this.value)" style="width:100px;">
+<button class="a-del" onclick="clk();aDelUser(${i})">✕</button>
+</div>`;
+});
+html+=`</div>`;
+
+// Mods
+html+=`<div class="admin-sec"><h3>Модераторы</h3><div id="aMods">`;
+mods.forEach((m,i)=>{
+html+=`<div class="admin-row"><input value="${m}" readonly><button class="a-del" onclick="clk();aDelMod(${i})">✕</button></div>`;
+});
+html+=`</div><div class="admin-row"><input id="newModInput" placeholder="Ник модератора"><button class="a-add" onclick="clk();aAddMod()">+</button></div></div>`;
+
+// Mod log
+const log=gd('modLog',[]);
+if(log.length){
+html+=`<div class="admin-sec"><h3>Действия модераторов</h3>`;
+log.slice(-20).reverse().forEach(l=>{
+html+=`<div style="font-size:7px;color:var(--text2);padding:6px 0;border-bottom:1px solid var(--glass-border);">[${l.time}] ${l.mod}: ${l.action} <button class="a-del" style="margin-left:6px;" onclick="clk();toast('Откат: функция в разработке','red')">Откатить</button></div>`;
+});
+html+=`</div>`;
+}
+}
+
+document.getElementById('adminContent').innerHTML=html;
+}
+
+function logMod(action){
+const u=gd('cur',null);if(!u)return;
+if(u.nick==='Xazbik_')return; // owner actions not logged
+const log=gd('modLog',[]);
+const now=new Date();
+const time=now.toLocaleString('ru');
+log.push({mod:u.nick,action,time});
+sd('modLog',log);
+}
+
+function aUpd(key,i,field,val){
+const d=gd(key,[]);d[i][field]=val;sd(key,d);
+logMod(`Изменил ${key}[${i}].${field}`);
+}
+function aDel(key,i){
+const d=gd(key,[]);const name=d[i].nick||d[i].name||'';d.splice(i,1);sd(key,d);
+logMod(`Удалил из ${key}: ${name}`);
+renderAdmin();
+}
+function aAdd(key){
+const d=gd(key,[]);
+if(key==='players')d.push({nick:'Новый',role:'Житель',status:'Оффлайн',desc:'',use:'@new',color:'#7c3aed'});
+else if(key==='emergency')d.push({nick:'Ник',event:'Описание',status:'Статус'});
+else if(key==='landmarks')d.push({name:'Новое место',desc:'Описание',img:'',architect:'',builders:''});
+else if(key==='descs')d.push({title:'Заголовок',text:'Текст'});
+sd(key,d);logMod(`Добавил в ${key}`);renderAdmin();
+}
+function aUpdBrand(name,val){const b=gd('brands',{});b[name]=val;sd('brands',b);}
+function aUpdUser(i,f,v){const u=gd('users',[]);u[i][f]=v;sd('users',u);}
+function aDelUser(i){const u=gd('users',[]);u.splice(i,1);sd('users',u);renderAdmin();}
+function aAddMod(){
+const inp=document.getElementById('newModInput');
+const nick=inp.value.trim();if(!nick)return;
+const m=gd('mods',[]);if(!m.includes(nick)){m.push(nick);sd('mods',m);}
+inp.value='';renderAdmin();
+}
+function aDelMod(i){const m=gd('mods',[]);m.splice(i,1);sd('mods',m);renderAdmin();}
+
+// ====== LIQUID GLASS TILT ======
+document.addEventListener('mousemove',e=>{
+document.querySelectorAll('.sec-btn,.feat-card,.btn,.brand-pill,.nav-btn,.lm-item').forEach(el=>{
+const r=el.getBoundingClientRect();
+const x=e.clientX-r.left,y=e.clientY-r.top;
+if(x>=0&&x<=r.width&&y>=0&&y<=r.height){
+const rx=((y/r.height)-.5)*8;
+const ry=((x/r.width)-.5)*-8;
+const dx=((x/r.width)-.5)*4;
+const dy=((y/r.height)-.5)*4;
+el.style.transform=`perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg) translate(${dx}px,${dy}px) scale(1.02)`;
+}
+});
+});
+document.addEventListener('mouseout',e=>{
+if(e.target.matches&&e.target.matches('.sec-btn,.feat-card,.btn,.brand-pill,.nav-btn,.lm-item')){
+e.target.style.transform='';
+}
+});
+
+// ====== INIT ======
+updAuth();
+addFooter(document.getElementById('page-home'));
+</script>
+</body>
+</html>
